@@ -30,10 +30,13 @@ chsh vagrant -s /bin/zsh
 echo "Disable Selinux / Set docker service parameters"
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
 service docker stop
-echo "other_args=-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock" > /etc/sysconfig/docker
+echo "other_args=\"-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock\"" > /etc/sysconfig/docker
 service docker start
 usermod -a -G docker vagrant
 
+echo "Docker Info"
+docker version
+
 cd /vagrant
 docker load -i oraclelinux-6.6.tar.xz
-sudo docker build -t="drashko/oracle12c" docker/oracle-c12/
+sudo docker build -t="oracle/oracle12c" docker/oracle-c12/
