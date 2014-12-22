@@ -1134,7 +1134,7 @@ SYSDBAUSERNAME = "sys"
 # Default value : None
 # Mandatory     : Yes
 #-----------------------------------------------------------------------------
-DB_UNIQUE_NAME = "orcl12c.us.oracle.com"
+DB_UNIQUE_NAME = "orcl12c"
 
 #-----------------------------------------------------------------------------
 # Name          : INSTANCENAME

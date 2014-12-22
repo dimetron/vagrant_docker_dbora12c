@@ -1,11 +1,27 @@
 This is repository with scripts to build Vagrant virtual images and install Oracle Database 12c
 
+Scripts are tested on OSX using Parallels and Virtualbox vagrant providers
+
 Original Docker file and script based on work done by Yasushi YAMAZAKI https://github.com/yasushiyy/vagrant-docker-oracle12c
 However VM boxes built by http://packer.io/ Oracle Linux 6.6  as well as official oracle 6.6 Docker images  
 http://public-yum.oracle.com/docker-images/
 
+VirtualBox 4.3.20 - Parallels Version 10.1.1 (28614)
+
+Docker started with flags:
+
+     -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock -s btrfs
+
+
+Changelog
+-------------------------------------------------
+21.12.2014 - Inintial version fixes
+22.12.2014 - Fully automated install script for oracle 
+22.12.2014 - Added separate btrfs partition for Docker, optimization
+
+
 Installation
-=============
+-------------------------------------------------
 
 0. __Install Vagrant__
     
@@ -16,7 +32,6 @@ Installation
     Default virtualizaton provider is Virtualbox
 
         https://www.virtualbox.org
-
 
 1. __Install packer check requirements for your builder at:__
 
@@ -41,36 +56,7 @@ Or only specify builder type:
 
 
 Using Docker VM
-=================
-
-To start VM use vagrant
-
-    $vagrant up
-
-
-Building Container with Oracle Database installed
-=========================
-
-__Start Docker VM and Download OL6.6 Docker image__
-
-```    
-    $vagrant ssh
-    cd /vagrant
-    wget http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz
-```
-
-__Build Container__
-
-```    
-    sudo docker build -t="oracle/oracle12c" docker/oracle-c12/
-```
-
-__Connect to the container__
-
-```
-    sudo docker run --privileged -h db12c -p 11521:1521 -t -i -v /vagrant:/vagrant oracle/oracle12c /bin/bash
-```
-
+-------------------------------------------------
 
 __Install Database in the container__
 
@@ -81,77 +67,63 @@ http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.ht
 * linuxamd64_12c_database_1of2.zip
 * linuxamd64_12c_database_2of2.zip
 
-This is manual step after connecting to container:
+To start VM use vagrant
 
-All commands inside container below begin as: [<user>@db12c ~]$ 
+    $vagrant up
 
-```
-sudo docker run --privileged -h db12c -p 1521:1521 -t -i -v /vagrant:/vagrant oracle/oracle12c /bin/bash
 
-[root@db12c ~]$ su - oracle
-[oracle@db12c ~]$ /vagrant/database/runInstaller -silent -showProgress -ignorePrereq -responseFile /vagrant/docker/oracle-c12/db_install.rsp
-[oracle@db12c ~]$ exit
+Below steps are already part of Vagrant provision script
 
-[root@db12c ~]$ /opt/oraInventory/orainstRoot.sh
-[root@db12c ~]$ /opt/oracle/product/12.1.0.2/dbhome_1/root.sh
+Building Container with Oracle Database installed
+-------------------------------------------------
 
-[root@db12c ~] su - oracle
-[oracle@db12c ~]$ netca -silent -responseFile $ORACLE_HOME/assistants/netca/netca.rsp
-[oracle@db12c ~]$ dbca -silent -createDatabase -responseFile /vagrant/docker/oracle-c12/dbca.rsp
-[oracle@db12c ~]$ exit
+__1. Start Docker VM and Download OL6.6 Docker image__
 
-[root@db12c ~]$ cp /vagrant/docker/oracle-c12/dbstart /etc/init.d/
-[root@db12c ~]$ chkconfig dbstart on
-[root@db12c ~]$ chmod +x /etc/init.d/dbstart
-[root@db12c ~]$ service dbstart start
-[root@db12c ~]$ service dbstart stop
-
-[root@db12c ~]$ vi /etc/oratab
-db12c:/opt/oracle/product/12.1.0.2/dbhome_1:Y
-
-ORACLE_HOME_LISTNER  ??? TODO fix
-
+```    
+    $vagrant ssh
+    cd /vagrant
+    wget http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz
 ```
 
-__Test connection__
-```
-sqlplus system/oracle@localhost:1521/db12c
+__2. Build Container__
 
-SQL> select count(1) from user_tables;
-
-  COUNT(1)
-----------
-       178
-
-SQL> show parameter inmemory
-
-SQL> exit
-
+```    
+    sudo docker build -t="oracle/oracle12c" /vagrant/docker/oracle-c12/
 ```
 
-__Save our changes__
+
+__3. This is will run automatic installation of software and create database :__
+
+```
+sudo docker run --privileged -h db12c -p 1521:1521 -t -i -v /vagrant:/vagrant oracle/oracle12c /bin/bash /vagrant/scripts/install_oracle.sh
+```
+
+__4. Save our installation as a new image__
 ```
 sudo docker ps -l
+sudo docker commit `docker ps --no-trunc -aq` oracle/database
 
-sudo docker commit `docker ps --no-trunc -aq` oracle/oracle12c
+#remove build container
+docker rm `docker ps --no-trunc -aq`
 
 sudo docker images
 
 ```
 
 
-The last step is for regular use of our database container
+Using Database container in detached mode
+-------------------------------------------------
 
-__Using Database container in detached mode__
 ```
 #list of all containers running
 docker ps -a
 
 #to start image in detached mode
-sudo docker run --privileged -h db12c -p 1521:1521 -t -d oracle/oracle12c /bin/bash
+sudo docker run --privileged -h db12c -p 1521:1521 -t -d oracle/database /bin/bash
 
 #check running processes
 sudo docker exec -i `docker ps --no-trunc -aq` ps -ef
+
 #start db
 sudo docker exec -i `docker ps --no-trunc -aq` /bin/bash  /etc/init.d/dbstart
 
@@ -169,3 +141,19 @@ docker rm `docker ps --no-trunc -aq`
 
 ```
 
+__Test connection__
+```
+su - oracle
+
+sqlplus system/oracle@localhost:1521/db12c
+
+SQL> select count(1) from user_tables;
+
+  COUNT(1)
+----------
+       178
+
+SQL> show parameter inmemory
+
+SQL> exit
+```

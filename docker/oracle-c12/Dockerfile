@@ -2,11 +2,12 @@ FROM oraclelinux:6.6
 MAINTAINER Dmytro Rashko <drashko@me.com>
 
 # fix missing MAKEDEV error
-RUN yum install -y MAKEDEV
-#RUN yum upgrade -y
+#RUN yum install -y MAKEDEV
+RUN yum upgrade -y
 
 # fix locale error
-RUN yum reinstall -y glibc-common
+#RUN yum reinstall -y glibc-common
+
 RUN echo LANG=en_US.utf-8 >> /etc/environment \
  && echo LC_ALL=en_US.utf-8 >> /etc/environment
 

@@ -48,6 +48,3 @@ case "$command" in
         rm -f /var/lock/subsys/dbora
         ;;
 esac
-
-#this is workaround to keep container running
-/bin/bash

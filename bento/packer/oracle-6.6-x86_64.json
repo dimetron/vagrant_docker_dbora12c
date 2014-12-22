@@ -31,7 +31,10 @@
           "{{.Name}}",
           "--cpus",
           "1"
-        ]
+        ],
+        [ "createhd", "--format", "VMDK", "--filename", "{{.Name}}-2.vmdk", "--variant", "STREAM", "--size", "1" ],
+        [ "storagectl", "{{.Name}}", "--name", "SATA Controller", "--add", "sata", "--controller", "IntelAHCI"],
+        [ "storageattach", "{{.Name}}", "--storagectl", "SATA Controller", "--port", "1", "--type", "hdd", "--medium", "{{.Name}}-2.vmdk" ]
       ],
       "virtualbox_version_file": ".vbox_version",
       "vm_name": "packer-oracle-6.6-x86_64"
@@ -93,7 +96,13 @@
           "{{.Name}}",
           "--cpus",
           "1"
+        ],
+        [
+          "set",
+          "{{.Name}}",        
+          "--device-add", "hdd", "--size", "40960","--iface", "sata"
         ]
+
       ],
       "prlctl_version_file": ".prlctl_version",
       "vm_name": "packer-oracle-6.6-x86_64"
@@ -101,22 +110,19 @@
   ],
   "post-processors": [
     {
-      "output": "../builds/{{.Provider}}/opscode_oracle-6.6_chef-{{user `chef_version`}}.box",
+      "output": "../builds/{{.Provider}}/opscode_oracle-6.6_base.box",
       "type": "vagrant"
     }
   ],
   "provisioners": [
-    {
-      "environment_vars": [
-        "CHEF_VERSION={{user `chef_version`}}"
-      ],
+    {      
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
       "scripts": [
         "scripts/centos/fix-slow-dns.sh",
+        "scripts/centos/addons.sh",
         "scripts/common/sshd.sh",
         "scripts/common/vagrant.sh",
         "scripts/common/vmtools.sh",
-        "scripts/common/chef.sh",
         "scripts/centos/cleanup.sh",
         "scripts/common/minimize.sh"
       ],
