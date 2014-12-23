@@ -1,4 +1,4 @@
-Oracle Linux 6.6 with Database 12c on Docker  
+Oracle 6.6 + Oracle 12c DB Docker builder  
 =============================================
 
 This is repository with scripts to build Vagrant virtual images and install Oracle Database 12c
@@ -9,28 +9,30 @@ Original Docker file and script based on work done by Yasushi YAMAZAKI https://g
 However VM boxes built by http://packer.io/ Oracle Linux 6.6  as well as official oracle 6.6 Docker images  
 http://public-yum.oracle.com/docker-images/
 
-- VirtualBox (4.3.20) 
+Versions
+-------------------------------------------------
+
+- VirtualBox (4.3.20)
 - Vagrant (1.7.1)
 - Packer  (0.7.5)
+- Oracle linux 6.6  :: from http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz 
+- Oracle Ent 12c    :: http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html 
+- Docker 1.4  - installed on separate btrfs partition /dev/sdb mounted /dev/sdb /var/lib/docker 
+    started with flags:
 
-- Docker 1.4        :: installed on separate btrfs partition /dev/sdb mounted /dev/sdb /var/lib/docker
-- Oracle linux 6.6  :: from http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz
-- Oracle Ent 12c    :: http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html
+     -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock -s btrfs
 
 _Optional (if you use OSX)_
 
 - Parallels Version 10.1.1 (28614)  
 - Parallels Virtualization SDK 10 for Mac (10.1.2-28859)
 
-Docker started with flags:
-
-     -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock -s btrfs
 
 Changelog
 -------------------------------------------------
-21.12.2014 - Inintial version fixes
-22.12.2014 - Fully automated install script for oracle 
-22.12.2014 - Added separate btrfs partition for Docker, optimization
+- 21.12.2014 - Inintial version fixes 
+- 22.12.2014 - Fully automated install script for oracle 
+- 22.12.2014 - Added separate btrfs partition for Docker, optimization
 
 
 Installation
@@ -38,15 +40,15 @@ Installation
 
 0. __Install Required Tools__
     
-_Vagrant_
+- _Vagrant_
  Download and install version for your platform.
  https://www.vagrantup.com/downloads.html
 
-_Virtualbox_
+- _Virtualbox_
  It's default virtualizaton provider, 
  https://www.virtualbox.org
 
-_Parallels_
+- _Parallels_
  In case you use Parallels you need to download also SDK:
  http://www.parallels.com/eu/products/desktop/download/
 
@@ -88,6 +90,7 @@ To start VM use vagrant
 
 
 Below steps are already part of Vagrant provision script
+
 
 Building Container with Oracle Database installed
 -------------------------------------------------
