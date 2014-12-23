@@ -1,3 +1,13 @@
+bin/
+.bundle/
+iso
+*.box
+virtualfloppy.vfd
+packer_cache
+packer.log
+.DS_Store
 .vagrant
-database
 oraclelinux-6.6.tar.xz
+database
+linuxamd64_12102_database_1of2.zip
+linuxamd64_12102_database_2of2.zip

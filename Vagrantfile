@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
     v.name = "Docker-VM"
     v.optimize_power_consumption = false
     #v.update_guest_tools = true
-    v.memory = 2048
+    v.memory = 2560
     v.cpus = 2  
  end
 
@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
    v.name = "Docker-VM"
    v.gui = false
-   v.memory = "2048"
+   v.memory = "2560"
    v.cpus = "2"   
    
   end

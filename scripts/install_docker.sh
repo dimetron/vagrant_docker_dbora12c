@@ -1,17 +1,22 @@
 #!/bin/sh
 
 #fix for docker filesystem issues
-echo "********** install docker on second drive *********"
+
+echo "----------------------------------------------"
+echo "Installing docker on btrfs -> /var/lib/docker "
+echo "----------------------------------------------"
+
 
 cd /tmp
 
 service docker stop
+rm -rf /var/run/docker.pid
+sed -i /btrfs/d /etc/fstab
 
-#make btrfs -> /dev/sdb
 mkfs.btrfs -f /dev/sdb
-echo "/dev/sdb1 /var/lib/docker btrfs defaults 0 0" >> /etc/fstab
+echo "/dev/sdb /var/lib/docker btrfs 	defaults 	0 	0" >> /etc/fstab
 mount -a
-btrfs filesystem show /var/lib/docker
+btrfs filesystem show 
 
 curl -O --location https://get.docker.io/builds/Linux/x86_64/docker-latest
 chmod a+x docker-latest
@@ -25,7 +30,10 @@ usermod -a -G docker vagrant
 chkconfig docker on
 service docker start
 
-echo "Docker Info"
+echo "----------------------------------------------"
+echo "Docker info: "
 docker info
-
-echo "***************************************************"
+echo "----------------------------------------------"
+echo "Docker Version: "
+docker version
+echo "----------------------------------------------"

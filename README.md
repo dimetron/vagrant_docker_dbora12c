@@ -1,3 +1,6 @@
+Oracle Linux 6.6 with Database 12c on Docker  
+=============================================
+
 This is repository with scripts to build Vagrant virtual images and install Oracle Database 12c
 
 Scripts are tested on OSX using Parallels and Virtualbox vagrant providers
@@ -6,12 +9,22 @@ Original Docker file and script based on work done by Yasushi YAMAZAKI https://g
 However VM boxes built by http://packer.io/ Oracle Linux 6.6  as well as official oracle 6.6 Docker images  
 http://public-yum.oracle.com/docker-images/
 
-VirtualBox 4.3.20 - Parallels Version 10.1.1 (28614)
+- VirtualBox (4.3.20) 
+- Vagrant (1.7.1)
+- Packer  (0.7.5)
+
+- Docker 1.4        :: installed on separate btrfs partition /dev/sdb mounted /dev/sdb /var/lib/docker
+- Oracle linux 6.6  :: from http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz
+- Oracle Ent 12c    :: http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html
+
+_Optional (if you use OSX)_
+
+- Parallels Version 10.1.1 (28614)  
+- Parallels Virtualization SDK 10 for Mac (10.1.2-28859)
 
 Docker started with flags:
 
      -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock -s btrfs
-
 
 Changelog
 -------------------------------------------------
@@ -23,28 +36,32 @@ Changelog
 Installation
 -------------------------------------------------
 
-0. __Install Vagrant__
+0. __Install Required Tools__
     
-    Download and install version for your platform.
-        
-        https://www.vagrantup.com/downloads.html
+_Vagrant_
+ Download and install version for your platform.
+ https://www.vagrantup.com/downloads.html
 
-    Default virtualizaton provider is Virtualbox
+_Virtualbox_
+ It's default virtualizaton provider, 
+ https://www.virtualbox.org
 
-        https://www.virtualbox.org
+_Parallels_
+ In case you use Parallels you need to download also SDK:
+ http://www.parallels.com/eu/products/desktop/download/
 
-1. __Install packer check requirements for your builder at:__
+_Packer_
+ http://www.packer.io/docs/installation.html
 
-    http://www.packer.io/docs/builders/parallels.html
-    http://www.packer.io/docs/builders/virtualbox.html
+or with homebrew ->
 
-2. __Get latest set of packer scripts__
+    $ brew tap homebrew/binary
+    $ brew install packer
 
-    git clone https://github.com/opscode/bento.git
 
-3. __Build VM images__  
-
-build for all platforms: 
+Building VM images  
+-------------------------------------------------
+Build for all platforms: 
 
     cd bento/packer/
     packer build oracle-6.6-x86_64.json
@@ -55,10 +72,8 @@ Or only specify builder type:
     packer build -only=parallels-iso oracle-6.6-x86_64.json
 
 
-Using Docker VM
+Install Database in the container
 -------------------------------------------------
-
-__Install Database in the container__
 
 Download the database binary (12.1.0.2.0) from below.  Unzip to the subdirectory name "database".
 
@@ -110,16 +125,26 @@ sudo docker images
 
 ```
 
+__Examples:__ 
 
 Using Database container in detached mode
 -------------------------------------------------
 
+Keep in mind docker need one main process to run detached.
+I use /bin/bash for that purpose. This allows to connect to existing container later on.
+
 ```
+# The following command is to get latest container ID `docker ps --no-trunc -aq`
+# You can replace it with any actual container id
+
 #list of all containers running
 docker ps -a
 
-#to start image in detached mode
+#to start image in detached mode - it will print container id after start
 sudo docker run --privileged -h db12c -p 1521:1521 -t -d oracle/database /bin/bash
+
+#connect to existing running container shell
+sudo docker exec -i -t `docker ps --no-trunc -aq` /bin/bash
 
 #check running processes
 sudo docker exec -i `docker ps --no-trunc -aq` ps -ef
@@ -129,9 +154,6 @@ sudo docker exec -i `docker ps --no-trunc -aq` /bin/bash  /etc/init.d/dbstart
 
 #stop db
 sudo docker exec -i `docker ps --no-trunc -aq` /etc/init.d/dbstart stop
-
-#shell
-sudo docker exec -i -t `docker ps --no-trunc -aq` /bin/bash
 
 #kill container
 docker kill `docker ps --no-trunc -aq`

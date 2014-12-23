@@ -1,17 +1,91 @@
 #!/bin/sh
 
-# Script to start Vagrant
+# Script to start Vagrant with Docker and Oracle
 # Using OSX default provider is parallels
+# 
+# author Dmytro Rashko - dimetron@me.com  aka. @dimetron
+# 
+# version 1.0   -- 23.12.2014
+#
 
-echo "Checking Docker dependencies ..."
+#URLS
+DOCKER_OL6="http://public-yum.oracle.com/docker-images/OracleLinux/OL6/"
+ORACLE_DB_ENT="http://download.oracle.com/otn/linux/oracle12c/121020/"
 
-FILE=oraclelinux-6.6.tar.xz
-if [ -f $FILE ]
+#docker oracle image and oracle DB 12c ent locations
+t1="oraclelinux-6.6.tar.xz"
+t2="linuxamd64_12102_database_1of2.zip"
+t3="linuxamd64_12102_database_2of2.zip"
+
+
+echo ""
+echo "Checking Required dependencies ..."
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"  
+echo ""
+
+#
+# This function require 3 parameter 
+# 	1 - FILE variable name {t1,t2,t3 ...}
+# 	2 - URL 
+# 	3 - MANUAL flag YES / NO
+# 	
+# It checks if file already exists and set var t1, t2, t3 return 0 if file found
+# 
+function download_once() {
+ VAR=f$1
+ eval FILE=\${$1}
+ 
+ CURL=$2
+ MANUAL=$3
+
+ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"  
+ echo "Checking : $FILE"
+ 
+ #download file only once
+ if [ -f "$FILE" ];
  then
-   echo "File   [$FILE] already exists. - OK"
+	echo "[OK] - File [$FILE] in the directory"
+	RES=0
  else
-   echo "File   [$FILE] will be downloaded"
-   	wget http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz
+ 	echo "[KO] - File [$FILE] not found in the directory"
+ 	if [ $MANUAL = 'YES' ];
+ 	then
+    	echo "File cannot be downloaded by script"
+		echo "Manual download required:"
+ 		echo "http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html"
+		RES=1
+ 	else 
+    	echo "Downloading $CURL ..."
+		curl -L -b "oraclelicense=accept-dbindex-cookie" $CURL  -o $FILE
+		RES=$?
+	fi 
+ fi
+ echo ""
+ eval "$VAR=$RES"
+}
+  
+#test all required files downloaded   
+download_once t1 "$DOCKER_OL6/$t1" "NO"
+download_once t2 "$ORACLE_DB_ENT/$t2" "YES"
+download_once t3 "$ORACLE_DB_ENT/$t3" "YES"
+
+if [ $ft1 -ne 0 ] || [ $ft2 -ne 0 ] || [ $ft3 -ne 0 ]; then
+ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"  
+ echo "!!!  Please download required files and place to the directory  !!! "
+ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"  
+ exit -1
+fi
+
+if [ -d "database" ]; 
+	then	
+		echo "Oracle install files already extracted"
+		#rm -rf database
+	else
+		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"   	
+		echo "Extracting oracle DB files ..."	
+		unzip -q $t2
+		unzip -q $t3
+		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
 fi
 
 #set platform specific parameters
@@ -34,6 +108,15 @@ else
 fi			
 
 echo "Using  [$VAGRANT_DEFAULT_PROVIDER] vagrant provider"
-
+echo "Booting VM ..."
 vagrant up
+
+echo "Starting SSH ..."
 vagrant ssh
+
+#cleanup
+#if [ -d "database" ]; then	
+#	echo "Cleanup oracle installation ..."
+#	rm -rf database
+#fi
+

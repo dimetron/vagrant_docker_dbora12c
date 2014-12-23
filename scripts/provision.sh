@@ -15,7 +15,8 @@ echo "Install docker  :: git htop tmux zsh"
 rpm -iUvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 yum install -y docker-io btrfs-progs btrfs-progs-devel mc zsh git tmux htop
 
-. /vagrant/scripts/install_docker.sh
+chmod +x /vagrant/scripts/install_docker.sh
+/vagrant/scripts/install_docker.sh
 
 echo "Install OhmyZSH"
 su - vagrant -c "git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh"
@@ -24,6 +25,8 @@ su - vagrant -c "sed -i 's/robbyrussell/norm/g' .zshrc"
 su - vagrant -c "sed -i 's/git/git docker npm sbt tmux yum/g' .zshrc"
 chsh vagrant -s /bin/zsh
 
+#echo "Update all packages"
+#yum update  -y
 
 echo "Installing oracle"
 sudo docker load -i /vagrant/oraclelinux-6.6.tar.xz
@@ -41,7 +44,4 @@ docker rm `docker ps --no-trunc -aq`
 echo "Installation complete"
 sudo docker ps -a
 sudo docker images
-
-echo "Update all packages"
-yum update  -y
 

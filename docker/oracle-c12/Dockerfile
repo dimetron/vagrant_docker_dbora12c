@@ -3,7 +3,7 @@ MAINTAINER Dmytro Rashko <drashko@me.com>
 
 # fix missing MAKEDEV error
 #RUN yum install -y MAKEDEV
-RUN yum upgrade -y
+#RUN yum upgrade -y
 
 # fix locale error
 #RUN yum reinstall -y glibc-common
@@ -12,8 +12,7 @@ RUN echo LANG=en_US.utf-8 >> /etc/environment \
  && echo LC_ALL=en_US.utf-8 >> /etc/environment
 
 # add extra packages
-RUN yum install -y vim-minimal
-RUN yum install -y oracle-rdbms-server-12cR1-preinstall
+RUN yum install -y vim-minimal oracle-rdbms-server-12cR1-preinstall
 
 # create directories
 RUN mkdir /opt/oracle /opt/oraInventory /opt/datafile \
