@@ -33,8 +33,7 @@
           "1"
         ],
         [ "createhd", "--format", "VMDK", "--filename", "{{.Name}}-2.vmdk", "--variant", "STREAM", "--size", "40960" ],
-        [ "storagectl", "{{.Name}}", "--name", "SATA Controller", "--add", "sata", "--controller", "IntelAHCI"],
-        [ "storageattach", "{{.Name}}", "--storagectl", "SATA Controller", "--port", "1", "--type", "hdd", "--medium", "{{.Name}}-2.vmdk" ]
+        [ "storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "1", "--device", "1", "--type", "hdd", "--medium", "{{.Name}}-2.vmdk" ]
       ],
       "virtualbox_version_file": ".vbox_version",
       "vm_name": "packer-oracle-6.6-x86_64"
