@@ -122,6 +122,7 @@
         "scripts/common/sshd.sh",
         "scripts/common/vagrant.sh",
         "scripts/common/vmtools.sh",
+        "scripts/centos/install_docker.sh",        
         "scripts/centos/cleanup.sh",
         "scripts/common/minimize.sh"
       ],

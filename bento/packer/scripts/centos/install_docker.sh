@@ -1,11 +1,29 @@
 #!/bin/sh
 
-#fix for docker filesystem issues
+# fix locale warning
+echo LANG=en_US.utf-8 >> /etc/environment
+echo LC_ALL=en_US.utf-8 >> /etc/environment
 
+# confirm
+echo "#--------- Linux Version --------"
+cat /etc/oracle-release
+uname -a
+echo "---------------------------------"
+
+#provision Docker settings add user vagrant to docker group
+echo "Install docker  :: git htop tmux zsh"
+rpm -iUvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+yum install -y docker-io btrfs-progs btrfs-progs-devel mc zsh git tmux htop
+
+echo "Install OhmyZSH"
+su - vagrant -c "git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh"
+su - vagrant -c "cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc"
+su - vagrant -c "sed -i 's/robbyrussell/norm/g' .zshrc"
+su - vagrant -c "sed -i 's/git/git docker npm sbt tmux yum/g' .zshrc"
+chsh vagrant -s /bin/zsh
 echo "----------------------------------------------"
 echo "Installing docker on btrfs -> /var/lib/docker "
 echo "----------------------------------------------"
-
 
 cd /tmp
 
