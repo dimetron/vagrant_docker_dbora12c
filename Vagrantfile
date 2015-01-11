@@ -26,12 +26,14 @@ Vagrant.configure("2") do |config|
   end
  
   #use proxy for local RPM cache
-  config.proxy.http     = "http://192.168.1.100:8080"
-  config.proxy.https    = "http://192.168.1.100:8080"
-  config.proxy.no_proxy = "localhost,127.0.0.1"
+  #config.proxy.http     = "http://192.168.1.100:8080"
+  #config.proxy.https    = "http://192.168.1.100:8080"
+  #config.proxy.no_proxy = "localhost,127.0.0.1"
 
   # Oracle and Docker port forwarding
   config.vm.network "forwarded_port", guest: 1521, host: 1521
+  config.vm.network "forwarded_port", guest: 8001, host: 8001
+  config.vm.network "forwarded_port", guest: 8002, host: 8002 
   config.vm.network "forwarded_port", guest: 4243, host: 4243
   
   # run setup.sh
