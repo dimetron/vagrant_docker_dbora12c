@@ -34,7 +34,6 @@ sudo su -c "docker kill   weblogic && docker rm weblogic && docker rmi oracle/we
 echo ">> Exporting oracle/weblogic images to [docker_export]:"
 echo " └─ ...-> oracle/weblogic .. " && sudo  su -c "docker save -o /vagrant/docker_export/weblogic12.tar.xz oracle/weblogic"
 
-
 echo "@@@ Building OracleDB12c image ..."
 cp /etc/yum.conf /vagrant/docker/oracle-c12/
 sudo docker build --no-cache -t="oracle/oracle12c" /vagrant/docker/oracle-c12/

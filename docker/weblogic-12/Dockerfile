@@ -40,6 +40,9 @@ ENV ADMIN_PASSWORD weblogic
 ENV BASE_HOME /home
 ENV INST /opt
 
+ENV JAVA_HOME /usr/java/default
+ENV CONFIG_JVM_ARGS -Djava.security.egd=file:/dev/./urandom
+
 # Setup required packages (unzip), filesystem, and crm92 user
 # ------------------------------------------------------------
 RUN useradd -b $BASE_HOME -m -s /bin/bash $ADMIN_USER \
