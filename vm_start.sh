@@ -121,10 +121,13 @@ echo "Using  [$VAGRANT_DEFAULT_PROVIDER] vagrant provider"
 
 #Firts time VM will create all images and then only reuse those
 if [ ! -f "docker_export/oracle12c_db.tar.xz" ]; then
+	say "Starting Build"	
 	#To start again remove old VM and Box
 	vagrant destroy -f
 	vagrant box remove Docker-OL6-$VAGRANT_DEFAULT_PROVIDER
 	vagrant up
+	
+	say "First Build is finished. Running cleanup"
 	vagrant destroy -f
 	#cleanup
 	if [ -d "database" ]; then	
@@ -133,8 +136,8 @@ if [ ! -f "docker_export/oracle12c_db.tar.xz" ]; then
 	fi
 fi
 
-echo "Booting VM ..."
+echo "Booting VM ..." && say "Booting VM."
 vagrant up
 
-echo "Starting SSH ..."
+echo "Starting SSH ..." && say "Your VM is ready to use."	
 vagrant ssh
