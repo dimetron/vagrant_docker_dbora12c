@@ -3,11 +3,11 @@ Oracle 6.6 + Oracle 12c DB Docker builder
 
 This is repository with scripts to build Vagrant virtual images and install Oracle Database 12c
 
-    REPOSITORY          TAG                 IMAGE ID             VIRTUAL SIZE
-    oracle/database     latest              11222af458e4         8.599 GB  - Oracle Database 12c + orcl12c DB instance
-    oracle/weblogic     latest              6f4cfcd531da         1.876 GB  - weblogic (only installation /opt/weblogic)
-    oracle/java         latest              835362a5b3ef         1.032 GB  - JDK + oracle-rdbms-server-12cR1-preinstall
-    oraclelinux         6.6                 d56e767abb61         319.4 MB  - base OL image
+    REPOSITORY        TAG      IMAGE ID       VIRTUAL SIZE
+    oracle/database   latest   11222af458e4   8.599 GB  - Oracle Database 12c + orcl12c DB instance
+    oracle/weblogic   latest   6f4cfcd531da   1.876 GB  - weblogic (only installation /opt/weblogic)
+    oracle/java       latest   835362a5b3ef   1.032 GB  - JDK + oracle-rdbms-server-12cR1-preinstall
+    oraclelinux       6.6      d56e767abb61   319.4 MB  - base OL image
 
 Scripts are tested on OSX using Parallels and Virtualbox vagrant providers
 
