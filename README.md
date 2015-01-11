@@ -34,8 +34,9 @@ Changelog
 -------------------------------------------------
 - 21.12.2014 - Inintial version fixes 
 - 22.12.2014 - Fully automated install script for oracle 
-- 22.12.2014 - Added separate btrfs partition for Docker, optimization
+- 22.12.2014 - Added separate btrfs partition for Docker storage
 - 11.01.2015 - VM image tmp folders optimizations Docker installation moved to packer stage.
+- 12.01.2015 - Added JDK 7u71 and Weblogic 12.1.3 Docker files to the provision 
 
 Installation
 -------------------------------------------------
@@ -139,26 +140,27 @@ I use /bin/bash for that purpose. This allows to connect to existing container l
 #list of all containers running
 docker ps -a
 
-#to start image in detached mode - it will print container id after start
-sudo docker run --privileged -h db12c -p 1521:1521 -t -d oracle/database /bin/bash
+#to start images in detached mode - with name database or weblogic
+sudo docker run --privileged -h db12c --name database -p 1521:1521 -t -d oracle/database /bin/bash
+sudo docker run --privileged -h crm92 --name weblogic  -p 8001:8001 -p 8002:8002 -t -d oracle/weblogic12 /bin/bash
 
 #connect to existing running container shell
-sudo docker exec -i -t `docker ps --no-trunc -aq` /bin/bash
+sudo docker exec -i -t database /bin/bash
 
 #check running processes
-sudo docker exec -i `docker ps --no-trunc -aq` ps -ef
+sudo docker exec -i database ps -ef
 
 #start db
-sudo docker exec -i `docker ps --no-trunc -aq` /bin/bash  /etc/init.d/dbstart
+sudo docker exec -i database /bin/bash  /etc/init.d/dbstart
 
 #stop db
-sudo docker exec -i `docker ps --no-trunc -aq` /etc/init.d/dbstart stop
+sudo docker exec -i database /etc/init.d/dbstart stop
 
 #kill container
-docker kill `docker ps --no-trunc -aq`
+docker kill database
 
 #remove container
-docker rm `docker ps --no-trunc -aq`
+docker rm database
 
 ```
 

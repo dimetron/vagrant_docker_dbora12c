@@ -32,6 +32,7 @@ echo "# Step 3 of 5 - Installing Listener ... 				  "
 echo "----------------------------------------------------------"
 
 su - oracle -c "netca -silent -responseFile /opt/oracle/product/12.1.0.2/dbhome_1/assistants/netca/netca.rsp"
+su - oracle -c "\$ORACLE_HOME/bin/lsnrctl start"
 
 #install database
 echo "----------------------------------------------------------"
@@ -62,9 +63,6 @@ service dbstart stop
 echo "----------------------------------------------------------"
 echo "# Installation complete  									"
 echo "----------------------------------------------------------"
-
-
-
 
 exit
 
