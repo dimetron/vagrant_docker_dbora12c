@@ -12,8 +12,9 @@ http://public-yum.oracle.com/docker-images/
 Versions
 -------------------------------------------------
 
-- VirtualBox (4.3.20)
-- Vagrant (1.7.1)
+- VirtualBox (4.3.12)  // later versions also may work 
+                       // however on windows 7 4.3.20 was unstable 
+- Vagrant (1.7.2)
 - Packer  (0.7.5)
 - Oracle linux 6.6  :: from http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz 
 - Oracle Ent 12c    :: http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html 
@@ -33,7 +34,7 @@ Changelog
 - 21.12.2014 - Inintial version fixes 
 - 22.12.2014 - Fully automated install script for oracle 
 - 22.12.2014 - Added separate btrfs partition for Docker, optimization
-
+- 11.01.2015 - VM image tmp folders optimizations Docker installation moved to packer stage.
 
 Installation
 -------------------------------------------------
@@ -61,7 +62,7 @@ or with homebrew ->
     $ brew install packer
 
 
-Building VM images  
+Building base VM images  
 -------------------------------------------------
 Build for all platforms: 
 
@@ -77,20 +78,15 @@ Or only specify builder type:
 Install Database in the container
 -------------------------------------------------
 
-Download the database binary (12.1.0.2.0) from below.  Unzip to the subdirectory name "database".
+1. __Download the database binary (12.1.0.2.0) from below.__  
+2. __Most of the steps already automated by vm_start.sh script__
 
 http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html
 
 * linuxamd64_12c_database_1of2.zip
 * linuxamd64_12c_database_2of2.zip
 
-To start VM use vagrant
-
-    $vagrant up
-
-
-Below steps are already part of Vagrant provision script
-
+_Below steps are already part of Vagrant provision script_
 
 Building Container with Oracle Database installed
 -------------------------------------------------
@@ -108,7 +104,6 @@ __2. Build Container__
 ```    
     sudo docker build -t="oracle/oracle12c" /vagrant/docker/oracle-c12/
 ```
-
 
 __3. This is will run automatic installation of software and create database :__
 

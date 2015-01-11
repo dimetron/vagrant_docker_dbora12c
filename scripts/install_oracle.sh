@@ -4,7 +4,19 @@ echo "----------------------------------------------------------"
 echo "# Step 1 of 5 - This script will install oracle database  "
 echo "----------------------------------------------------------"
 
+#mkdir /vagrant/tmp
+#
+su - oracle -c "cp /home/oracle/.bash_profile /home/oracle/.bash_profile.old"
+
+#moving oracle temp files out of VM
+su - oracle -c "echo export TMPDIR=/vagrant/tmp >> /home/oracle/.bash_profile"
+su - oracle -c "echo export TEMP=/vagrant/tmp >> /home/oracle/.bash_profile" 
+su - oracle -c "echo export TMP=/vagrant/tmp >> /home/oracle/.bash_profile" 
+
 su - oracle -c "/vagrant/database/runInstaller -silent -waitforcompletion -showProgress -ignorePrereq -responseFile /vagrant/docker/oracle-c12/db_install.rsp"
+
+#restore orig ENV settings
+su - oracle -c "mv /home/oracle/.bash_profile.old /home/oracle/.bash_profile"
 
 #post installation setup
 echo "----------------------------------------------------------"
@@ -13,7 +25,6 @@ echo "----------------------------------------------------------"
 
 /opt/oraInventory/orainstRoot.sh
 /opt/oracle/product/12.1.0.2/dbhome_1/root.sh
-
 
 #install listener
 echo "----------------------------------------------------------"
@@ -42,8 +53,18 @@ chkconfig dbstart on
 service dbstart stop
 
 echo "----------------------------------------------------------"
+echo "# Verify oracle DB start / stop								"
+echo "----------------------------------------------------------"
+
+service dbstart start
+service dbstart stop
+
+echo "----------------------------------------------------------"
 echo "# Installation complete  									"
 echo "----------------------------------------------------------"
+
+
+
 
 exit
 

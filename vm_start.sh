@@ -6,7 +6,8 @@
 # author Dmytro Rashko - dimetron@me.com  aka. @dimetron
 # 
 # version 1.0   -- 23.12.2014
-#
+# version 1.0   -- 10.01.2015 Docker setup moved inside packer
+
 
 #URLS
 DOCKER_OL6="http://public-yum.oracle.com/docker-images/OracleLinux/OL6/"
@@ -16,7 +17,6 @@ ORACLE_DB_ENT="http://download.oracle.com/otn/linux/oracle12c/121020/"
 t1="oraclelinux-6.6.tar.xz"
 t2="linuxamd64_12102_database_1of2.zip"
 t3="linuxamd64_12102_database_2of2.zip"
-
 
 echo ""
 echo "Checking Required dependencies ..."
@@ -42,12 +42,12 @@ function download_once() {
  echo "Checking : $FILE"
  
  #download file only once
- if [ -f "$FILE" ];
+ if [ -f "downloads/$FILE" ];
  then
-	echo "[OK] - File [$FILE] in the directory"
+	echo "[OK] - File [$FILE] in the [downloads] directory"
 	RES=0
  else
- 	echo "[KO] - File [$FILE] not found in the directory"
+ 	echo "[KO] - File [$FILE] not found in the [downloads] directory"
  	if [ $MANUAL = 'YES' ];
  	then
     	echo "File cannot be downloaded by script"
@@ -83,10 +83,11 @@ if [ -d "database" ];
 	else
 		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"   	
 		echo "Extracting oracle DB files ..."	
-		unzip -q $t2
-		unzip -q $t3
+		unzip -q "downloads/$t2"
+		unzip -q "downloads/$t3"
 		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
 fi
+
 
 #set platform specific parameters
 if [[ `uname` == 'Darwin' ]]; 
@@ -106,6 +107,20 @@ else
 	echo "Plugin [$VAGRANT_PLUGIN] will be installed"
 	vagrant plugin install $VAGRANT_PLUGIN
 fi			
+
+#test if proxyconf plugin is installed
+if cat  ~/.vagrant.d/plugins.json | grep -q vagrant-proxyconf
+then	
+	echo "Plugin [vagrant-proxyconf] already installed - OK"
+else
+	echo "Plugin [vagrant-proxyconf] will be installed"
+	vagrant plugin install vagrant-proxyconf
+fi	
+
+#To start again remove old VM and Box
+vagrant destroy -f
+vagrant box remove Docker-OL6-$VAGRANT_DEFAULT_PROVIDER
+
 
 echo "Using  [$VAGRANT_DEFAULT_PROVIDER] vagrant provider"
 echo "Booting VM ..."

@@ -35,15 +35,15 @@ case "$command" in
         # The following command assumes that the oracle login 
         # will not prompt the user for any values
         # Remove "&" if you don't want startup as a background process.
-        su - $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl start" &
-        su - $ORA_OWNER -c $ORA_HOME/bin/dbstart &
+        su - $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl start"
+        su - $ORA_OWNER -c "$ORA_HOME/bin/dbstart"
         touch /var/lock/subsys/dbora
         ;;
     'stop')
         # Stop the Oracle databases:
         # The following command assumes that the oracle login 
         # will not prompt the user for any values
-        su - $ORA_OWNER -c $ORA_HOME/bin/dbshut
+        su - $ORA_OWNER -c "$ORA_HOME/bin/dbshut $ORA_HOME"
         su - $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl stop"
         rm -f /var/lock/subsys/dbora
         ;;
