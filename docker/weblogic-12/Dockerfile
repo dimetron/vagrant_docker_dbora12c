@@ -23,7 +23,7 @@
 #
 
 #Using base image from Oracle
-FROM oracle/java-7u71
+FROM oracle/java
 MAINTAINER Dmytro Rashko <drashko@me.com>
 
 #to copy proxy settings if any
