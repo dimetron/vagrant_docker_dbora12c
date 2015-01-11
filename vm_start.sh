@@ -64,30 +64,33 @@ function download_once() {
  eval "$VAR=$RES"
 }
   
+
+if [ ! -f "docker_export/oracle12c_db.tar.xz" ]; then
+		
 #test all required files downloaded   
 download_once t1 "$DOCKER_OL6/$t1" "NO"
 download_once t2 "$ORACLE_DB_ENT/$t2" "YES"
 download_once t3 "$ORACLE_DB_ENT/$t3" "YES"
 
-if [ $ft1 -ne 0 ] || [ $ft2 -ne 0 ] || [ $ft3 -ne 0 ]; then
- echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"  
- echo "!!!  Please download required files and place to the directory  !!! "
- echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"  
- exit -1
-fi
+	if [ $ft1 -ne 0 ] || [ $ft2 -ne 0 ] || [ $ft3 -ne 0 ]; then
+	 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"  
+	 echo "!!!  Please download required files and place to the directory  !!! "
+	 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"  
+	 exit -1
+	fi
 
-if [ -d "database" ]; 
-	then	
-		echo "Oracle install files already extracted"
-		#rm -rf database
-	else
-		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"   	
-		echo "Extracting oracle DB files ..."	
-		unzip -q "downloads/$t2"
-		unzip -q "downloads/$t3"
-		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
+	if [ -d "database" ]; 
+		then	
+			echo "Oracle install files already extracted"
+			#rm -rf database
+		else
+			echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"   	
+			echo "Extracting oracle DB files ..."	
+			unzip -q "downloads/$t2"
+			unzip -q "downloads/$t3"
+			echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 	
+	fi
 fi
-
 
 #set platform specific parameters
 if [[ `uname` == 'Darwin' ]]; 

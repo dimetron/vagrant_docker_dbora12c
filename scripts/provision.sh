@@ -3,15 +3,15 @@
 if [ -f "/vagrant/docker_export/oracle12c_db.tar.xz" ];
 then
 	echo "------------------------------------------"
-	echo "Second run ..."	
-	echo "Images will be loaded into VM."
+	echo "Provisioning for the second run ..."	
+	echo "Docker images will be loaded into VM."
 	echo "------------------------------------------"
 
 	. /vagrant/scripts/import_images.sh
 else
     echo "------------------------------------------"
-	echo "First run ..."	
-	echo "VM will build all images and then restart."
+	echo "Provisioning for the first run ..."	
+	echo "Building Docker images and restart."
 	echo "------------------------------------------"
 
 	. /vagrant/scripts/create_images.sh	
