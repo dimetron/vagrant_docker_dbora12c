@@ -44,7 +44,7 @@ case "$command" in
         # The following command assumes that the oracle login 
         # will not prompt the user for any values
         su - $ORA_OWNER -c "$ORA_HOME/bin/dbshut $ORA_HOME"
-        su - $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl stop"
+        #su - $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl stop"
         rm -f /var/lock/subsys/dbora
         ;;
 esac
