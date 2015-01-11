@@ -16,12 +16,13 @@ Versions
                        // however on windows 7 4.3.20 was unstable 
 - Vagrant (1.7.2)
 - Packer  (0.7.5)
-- Oracle linux 6.6  :: from http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz 
-- Oracle Ent 12c    :: http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html 
-- Docker 1.4  - installed on separate btrfs partition /dev/sdb mounted /dev/sdb /var/lib/docker 
-    started with flags:
 
-     -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock -s btrfs
+- Weblogic  12.1.3  :: 
+- JDK       1.7.51  :: 
+- Oracle linux 6.6  :: http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz 
+- Oracle Ent   12c  :: http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html 
+- Docker       1.4  :: - installed on separate btrfs partition /dev/sdb mounted /dev/sdb /var/lib/docker 
+                     : - started with flags: -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock -s btrfs
 
 _Optional (if you use OSX)_
 

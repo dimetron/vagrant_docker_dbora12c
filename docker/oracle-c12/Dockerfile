@@ -1,13 +1,13 @@
-FROM oraclelinux:6.6
+FROM oracle/java-7u71
 MAINTAINER Dmytro Rashko <drashko@me.com>
 
 #to copy proxy settings if any
-ADD yum.conf  /etc/yum.conf 
+#ADD yum.conf  /etc/yum.conf 
 
 # add extra packages
-RUN yum clean all \
- && yum install -y vim-minimal oracle-rdbms-server-12cR1-preinstall \
- && yum clean all
+# RUN yum clean all \
+# && yum install -y vim-minimal oracle-rdbms-server-12cR1-preinstall \
+# && yum clean all
 
 # create directories
 RUN mkdir /opt/oracle /opt/oraInventory /opt/datafile \
