@@ -117,21 +117,24 @@ else
 	vagrant plugin install vagrant-proxyconf
 fi	
 
-#To start again remove old VM and Box
-vagrant destroy -f
-vagrant box remove Docker-OL6-$VAGRANT_DEFAULT_PROVIDER
-
-
 echo "Using  [$VAGRANT_DEFAULT_PROVIDER] vagrant provider"
+
+#Firts time VM will create all images and then only reuse those
+if [ ! -f "docker_export/oracle12c_db.tar.xz" ]; then
+	#To start again remove old VM and Box
+	vagrant destroy -f
+	vagrant box remove Docker-OL6-$VAGRANT_DEFAULT_PROVIDER
+	vagrant up
+	vagrant destroy -f
+	#cleanup
+	if [ -d "database" ]; then	
+		echo "Cleanup oracle installation ..."
+		rm -rf database
+	fi
+fi
+
 echo "Booting VM ..."
 vagrant up
 
 echo "Starting SSH ..."
 vagrant ssh
-
-#cleanup
-#if [ -d "database" ]; then	
-#	echo "Cleanup oracle installation ..."
-#	rm -rf database
-#fi
-

@@ -4,12 +4,11 @@ Oracle 6.6 + Oracle 12c DB Docker builder
 This is repository with scripts to build Vagrant virtual images and install Oracle Database 12c
 
     REPOSITORY        TAG      IMAGE ID       VIRTUAL SIZE
-    oracle/database   latest   11222af458e4   8.599 GB  - Oracle Database 12c + orcl12c DB instance
+    oracle/database   latest   11222af458e4   8.605 GB  - Oracle Database 12c + orcl12c DB instance
     oracle/weblogic   latest   6f4cfcd531da   1.876 GB  - weblogic (only installation /opt/weblogic)
     oracle/java       latest   835362a5b3ef   1.032 GB  - JDK + oracle-rdbms-server-12cR1-preinstall
     oraclelinux       6.6      d56e767abb61   319.4 MB  - base OL image
 
-Scripts are tested on OSX using Parallels and Virtualbox vagrant providers
 
 Original Docker file and script based on work done by Yasushi YAMAZAKI https://github.com/yasushiyy/vagrant-docker-oracle12c
 However VM boxes built by http://packer.io/ Oracle Linux 6.6  as well as official oracle 6.6 Docker images  
@@ -18,11 +17,8 @@ http://public-yum.oracle.com/docker-images/
 Versions
 -------------------------------------------------
 
-- VirtualBox (4.3.12)  // later versions also may work 
-                       // however on windows 7 4.3.20 was unstable 
-- Vagrant (1.7.2)
+- VirtualBox (4.3.12)
 - Packer  (0.7.5)
-
 - Weblogic  12.1.3  :: 
 - JDK       1.7.51  :: 
 - Oracle linux 6.6  :: http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz 
@@ -96,7 +92,13 @@ http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.ht
 
 _Below steps are already part of Vagrant provision script_
 
-Building Container with Oracle Database installed
+Build Process
+-------------------------------------------------
+vm_start.sh will detect if it is first run and create all docker container images at first run.
+After that it will destroy the VM and load create images from tar.xz files 
+This allows to save VM disk space and keep Docker VM small
+
+Building Containers
 -------------------------------------------------
 
 __1. Start Docker VM and Download OL6.6 Docker image__
