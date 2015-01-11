@@ -101,28 +101,26 @@ __1. Start Docker VM and Download OL6.6 Docker image__
     wget http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz
 ```
 
-__2. Build Container__
+__2. Build Containers__
 
 ```    
-    sudo docker build -t="oracle/oracle12c" /vagrant/docker/oracle-c12/
+    sudo docker build --no-cache -t="oracle/java-7u71" /vagrant/docker/java-7u71/
+    sudo docker build --no-cache -t="oracle/weblogic12" /vagrant/docker/weblogic-12/
+    sudo docker build --no-cache -t="oracle/oracle12c" /vagrant/docker/oracle-c12/
 ```
 
 __3. This is will run automatic installation of software and create database :__
 
 ```
-sudo docker run --privileged -h db12c -p 1521:1521 -t -i -v /vagrant:/vagrant oracle/oracle12c /bin/bash /vagrant/scripts/install_oracle.sh
+sudo docker run --privileged -h db12c --name database -p 1521:1521 -t -i -v /vagrant:/vagrant oracle/oracle12c /bin/bash /vagrant/scripts/install_oracle.sh
 ```
 
 __4. Save our installation as a new image__
 ```
-sudo docker ps -l
-sudo docker commit `docker ps --no-trunc -aq` oracle/database
+docker export database | docker import - oracle/database
 
 #remove build container
-docker rm `docker ps --no-trunc -aq`
-
-sudo docker images
-
+sudo docker kill database && docker rm database
 ```
 
 __Examples:__ 
@@ -140,9 +138,12 @@ I use /bin/bash for that purpose. This allows to connect to existing container l
 #list of all containers running
 docker ps -a
 
-#to start images in detached mode - with name database or weblogic
+#to start images in detached mode - with container name  [database] or [weblogic]
 sudo docker run --privileged -h db12c --name database -p 1521:1521 -t -d oracle/database /bin/bash
-sudo docker run --privileged -h crm92 --name weblogic  -p 8001:8001 -p 8002:8002 -t -d oracle/weblogic12 /bin/bash
+sudo docker run --privileged -h crm92 --name weblogic  -p 8001:8001 -p 8002:8002 -t -d oracle/weblogic /bin/bash
+
+#execute simple command
+sudo docker exec -i weblogic java -version
 
 #connect to existing running container shell
 sudo docker exec -i -t database /bin/bash
