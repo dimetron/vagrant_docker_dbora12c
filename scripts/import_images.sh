@@ -18,12 +18,14 @@ sudo docker images
 
 echo "Starting Images"
 echo "...................."
-sudo docker run  --privileged -h db12c --name database -p 1521:1521 -t -d  oracle/database /bin/bash
-sudo docker run  --privileged -h crm92 --name weblogic -p 8001:8001 -p 8002:8002 -t -d oracle/weblogic /bin/bash
-sudo docker ps -a
+
+sudo docker run  --privileged --restart=always -h db12c --name database -v /opt/oracle/product -p 1521:1521 -t -d   oracle/database /bin/bash
+sudo docker run  --privileged --restart=always -h crm92 --name weblogic --volumes-from databse -p 8001:8001 -p 8002:8002  -t -d oracle/weblogic /bin/bash
 
 sudo docker exec -i database /bin/bash  /etc/init.d/dbstart
 sudo docker exec -i weblogic java -version
+echo "...................."
+sudo docker ps -a
 
 echo ". /vagrant/scripts/aliases.sh" >> .zshrc
 

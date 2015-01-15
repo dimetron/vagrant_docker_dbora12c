@@ -22,4 +22,10 @@ RUN echo "LANG=en_US.utf-8" >> /etc/environment \
  && echo "export ORACLE_SID=db12c" >> /home/oracle/.bash_profile \
  && echo "export PATH=\$PATH:\$ORACLE_HOME/bin" >> /home/oracle/.bash_profile
  
-CMD ["/bin/bash"]
+ADD bootstrap.sh /etc/bootstrap.sh
+RUN chown root:root /etc/bootstrap.sh
+RUN chmod 700 /etc/bootstrap.sh
+
+CMD ["/etc/bootstrap.sh", "-d"]
+
+EXPOSE 1251

@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
     v.optimize_power_consumption = false
     #v.update_guest_tools = true
     v.memory = 2560
-    v.cpus = 4  
+    v.cpus = 2  
  end
 
   #VIRTUAL BOX PROVIDER SETTINGS

@@ -1,6 +1,8 @@
 Oracle 6.6 + Oracle 12c DB Docker builder  
 =============================================
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dimetron/vagrant_docker_dbora12c?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 This is repository with scripts to build Vagrant virtual images and install Oracle Database 12c
 
     REPOSITORY        TAG      IMAGE ID       VIRTUAL SIZE
@@ -140,9 +142,6 @@ Keep in mind docker need one main process to run detached.
 I use /bin/bash for that purpose. This allows to connect to existing container later on.
 
 ```
-# The following command is to get latest container ID `docker ps --no-trunc -aq`
-# You can replace it with any actual container id
-
 #list of all containers running
 docker ps -a
 

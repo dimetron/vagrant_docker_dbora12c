@@ -22,11 +22,11 @@ if [[ $SHLVL -eq 1 ]] ; then
     print -P "\e[1;32m Running: \e[1;34m`uname -srm`\e[1;32m on \e[1;34m%l"
     print -P "\e[1;32m It is:\e[1;34m %D{%r} \e[1;32m on \e[1;34m%D{%A %b %f %G}"
     echo  
-	print -P "\e[1;32m Docker Version: \e[1;34m"
-    docker version
+	print -P "\e[1;32m Docker containers: \e[1;34m"
+    docker ps -a 
 	print -P "\e[1;32m"
 
-    echo "Following aliases available:"
+    echo " Following aliases available:"
     echo "--------------------------------------------------"
 	echo "db_container_init"
 	echo "db_container_start"
