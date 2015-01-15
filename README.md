@@ -1,6 +1,8 @@
 Oracle 6.6 + Oracle 12c DB Docker builder  
 =============================================
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dimetron/vagrant_docker_dbora12c?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This is repository with scripts to build Vagrant virtual images and install Oracle Database 12c
 
     REPOSITORY        TAG      IMAGE ID       VIRTUAL SIZE
