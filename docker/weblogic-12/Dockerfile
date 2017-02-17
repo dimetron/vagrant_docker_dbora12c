@@ -83,8 +83,8 @@ RUN echo -e "inventory_loc=$INST/.inventory" 	> oraInst.loc    \
  && cat install.file 
 
 # Installation of WebLogic 
-RUN java -jar $WLS_PKG -silent -responseFile $INST/install.file -invPtrLoc $INST/oraInst.loc -jreLoc $JAVA_HOME \
- && cd $INST && rm -rf *.jar && rm $WLS_PKG oraInst.loc install.file
+RUN java -jar $WLS_PKG -silent -responseFile $INST/install.file -invPtrLoc $INST/oraInst.loc -jreLoc $JAVA_HOME
+RUN cd $INST && rm $WLS_PKG oraInst.loc install.file
 
 WORKDIR $BASE_HOME/$ADMIN_USER
 

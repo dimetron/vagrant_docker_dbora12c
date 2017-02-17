@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -f "/vagrant/docker_export/oracle12c_db.tar.xz" ];
+if [ -f "/vagrant/docker_export/oracle12c.tar.xz" ];
 then
 	echo "------------------------------------------"
 	echo "Provisioning for the second run ..."	

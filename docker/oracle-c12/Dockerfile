@@ -5,8 +5,7 @@ MAINTAINER Dmytro Rashko <drashko@me.com>
 #ADD yum.conf  /etc/yum.conf 
 
 # add extra packages
-RUN yum clean all \
- && yum install -y oracle-rdbms-server-12cR1-preinstall \
+RUN yum install -y oracle-rdbms-server-12cR1-preinstall \
  && yum clean all
 
 # create directories
