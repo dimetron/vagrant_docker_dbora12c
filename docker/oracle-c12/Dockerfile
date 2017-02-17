@@ -6,7 +6,7 @@ MAINTAINER Dmytro Rashko <drashko@me.com>
 
 # add extra packages
 RUN yum clean all \
- && yum install -y vim-minimal oracle-rdbms-server-12cR1-preinstall \
+ && yum install -y oracle-rdbms-server-12cR1-preinstall \
  && yum clean all
 
 # create directories
