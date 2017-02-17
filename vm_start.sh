@@ -10,11 +10,10 @@
 
 
 #URLS
-DOCKER_OL6="http://public-yum.oracle.com/docker-images/OracleLinux/OL6/"
 ORACLE_DB_ENT="http://download.oracle.com/otn/linux/oracle12c/121020/"
 
 #docker oracle image and oracle DB 12c ent locations
-t1="oraclelinux-6.6.tar.xz"
+t1="oraclelinux-7.3.tar.xz"
 t2="linuxamd64_12102_database_1of2.zip"
 t3="linuxamd64_12102_database_2of2.zip"
 
@@ -68,7 +67,6 @@ function download_once() {
 if [ ! -f "docker_export/oracle12c_db.tar.xz" ]; then
 		
 #test all required files downloaded   
-download_once t1 "$DOCKER_OL6/$t1" "NO"
 download_once t2 "$ORACLE_DB_ENT/$t2" "YES"
 download_once t3 "$ORACLE_DB_ENT/$t3" "YES"
 

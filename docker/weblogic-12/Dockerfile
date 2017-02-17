@@ -22,8 +22,11 @@
 #     sudo docker build --no-cache -t="oracle/weblogic12" /vagrant/docker/weblogic-12/
 #
 
+#  TODO: Check this out 
+#  https://github.com/oracle/docker-images/tree/master/OracleWebLogic
+
 #Using base image from Oracle
-FROM oracle/java
+FROM oracle/jdk-8u121
 MAINTAINER Dmytro Rashko <drashko@me.com>
 
 #to copy proxy settings if any
@@ -81,7 +84,7 @@ RUN echo -e "inventory_loc=$INST/.inventory" 	> oraInst.loc    \
 
 # Installation of WebLogic 
 RUN java -jar $WLS_PKG -silent -responseFile $INST/install.file -invPtrLoc $INST/oraInst.loc -jreLoc $JAVA_HOME \
- && rm $WLS_PKG $INST/oraInst.loc $INST/install.file
+ && cd $INST && rm -rf *.jar && rm $WLS_PKG oraInst.loc install.file
 
 WORKDIR $BASE_HOME/$ADMIN_USER
 
