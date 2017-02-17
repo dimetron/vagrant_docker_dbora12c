@@ -10,7 +10,7 @@ ADD yum.conf  /etc/yum.conf
 
 #Install OpenJDK with all  dependencies
 #RUN yum install -y java-1.8.0-openjdk
-RUN yum install -y wget unzip &&  yum -y clean all
+RUN yum install -y vim-minimal wget unzip &&  yum -y clean all
 
 # Install and configure Oracle JDK 8u121
 # -------------------------------------

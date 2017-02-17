@@ -16,7 +16,7 @@ Original Docker file and script based on work done by Yasushi YAMAZAKI https://g
 However VM boxes built by http://packer.io/ Oracle Linux 6.6  as well as official oracle 6.6 Docker images  
 http://public-yum.oracle.com/docker-images/
 
-Versions
+Versions  (OUTDATED!!!)
 -------------------------------------------------
 
 - VirtualBox (4.3.12)
@@ -147,7 +147,7 @@ docker ps -a
 
 #to start images in detached mode - with container name  [database] or [weblogic]
 sudo docker run --privileged -h db12c --name database -p 1521:1521 -t -d oracle/database /bin/bash
-sudo docker run --privileged -h crm92 --name weblogic  -p 8001:8001 -p 8002:8002 -t -d oracle/weblogic /bin/bash
+sudo docker run --privileged -h weblogic --name weblogic  -p 8001:8001 -p 8002:8002 -t -d oracle/weblogic /bin/bash
 
 #execute simple command
 sudo docker exec -i weblogic java -version

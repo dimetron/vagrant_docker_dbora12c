@@ -70,7 +70,7 @@ if [ ! -f "docker_export/oracle12c_db.tar.xz" ]; then
 download_once t2 "$ORACLE_DB_ENT/$t2" "YES"
 download_once t3 "$ORACLE_DB_ENT/$t3" "YES"
 
-	if [ $ft1 -ne 0 ] || [ $ft2 -ne 0 ] || [ $ft3 -ne 0 ]; then
+	if [ $ft2 -ne 0 ] || [ $ft3 -ne 0 ]; then
 	 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"  
 	 echo "!!!  Please download required files and place to the directory  !!! "
 	 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"  
@@ -125,7 +125,7 @@ if [ ! -f "docker_export/oracle12c_db.tar.xz" ]; then
 	say "Starting Build"	
 	#To start again remove old VM and Box
 	vagrant destroy -f
-	vagrant box remove Docker-OL6-$VAGRANT_DEFAULT_PROVIDER
+	vagrant box remove Docker-OL73-$VAGRANT_DEFAULT_PROVIDER
 	vagrant up
 	
 	say "First Build is finished. Running cleanup"

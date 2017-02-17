@@ -1,23 +1,4 @@
 #!/bin/sh
-#echo "Update all packages" && yum update  -y
-export DOCKER_TMPDIR=/vagrant/tmp
-rm -rf $DOCKER_TMPDIR 
-mkdir  $DOCKER_TMPDIR
-
-#clean old images
-rm -rf /vagrant/docker_export/jdk*.tar.xz
-
-#to reduce internal tmp usage after image load we will use external tmp
-echo "export DOCKER_TMPDIR=$DOCKER_TMPDIR" >> /etc/sysconfig/docker
-echo "export DOCKER_TMPDIR=$DOCKER_TMPDIR" >> /etc/profile.d/temp.sh
-service docker restart
-
-#cleanup
-echo "--- Cleanup old lcontainers before the build ..."
-sudo su -c "docker kill weblogic && docker rm weblogic"
-sudo su -c "docker rm -v $(docker ps -a -q -f status=exited)"
-sudo su -c "docker rmi $(docker images --filter "dangling=true" -q --no-trunc)"
-echo "---"
 
 echo "@@@ Building Weblogic image ..."
 cp /etc/yum.conf /vagrant/docker/weblogic-12/

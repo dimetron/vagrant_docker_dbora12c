@@ -8,12 +8,15 @@ echo "export DOCKER_TMPDIR=$DOCKER_TMPDIR" >> /etc/sysconfig/docker
 echo "export DOCKER_TMPDIR=$DOCKER_TMPDIR" >> /etc/profile.d/temp.sh
 service docker restart
 
+echo "Loading base JDK image"
+sudo  su -c "docker load -i /vagrant/docker_export/jdk-8u121.tar.xz"
+
 echo "Loading base Weblogic image"
 sudo  su -c "docker load -i /vagrant/docker_export/weblogic12.tar.xz"
 
 echo "Loading 8GB Oracle image ..."
 echo "This may take some time :)"
-sudo  su -c "docker load -i /vagrant/docker_export/oracle12c_db.tar.xz"
+sudo  su -c "docker load -i /vagrant/docker_export/oracle12c.tar.xz"
 sudo docker images
 
 echo "Starting Images"

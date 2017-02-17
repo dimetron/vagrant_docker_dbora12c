@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
  
-  config.vm.box = "Docker-OL7.3-#{ENV['VAGRANT_DEFAULT_PROVIDER']}" 
+  config.vm.box = "Docker-OL73-#{ENV['VAGRANT_DEFAULT_PROVIDER']}" 
   config.vm.box_url="bento/builds/oracle-7.3.#{ENV['VAGRANT_DEFAULT_PROVIDER']}.box"
   
   config.vm.hostname = "docker-vm"
@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
     v.name = "Docker-VM"
     v.optimize_power_consumption = false
     #v.update_guest_tools = true
-    v.memory = 512
+    v.memory = 1500
     v.cpus = 2  
  end
 
@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
    v.name = "Docker-VM"
    v.gui = false
-   v.memory = "512M"
+   v.memory = "1500M"
    v.cpus = "2"   
   end
    
@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
   # Oracle and Docker port forwarding
   config.vm.network "forwarded_port", guest: 1521, host: 1521
   config.vm.network "forwarded_port", guest: 8001, host: 8001
-  config.vm.network "forwarded_port", guest: 8002, host: 8002 
+  config.vm.network "forwarded_port", guest: 8002, host: 8002
   config.vm.network "forwarded_port", guest: 4243, host: 4243
   
   # run setup.sh
