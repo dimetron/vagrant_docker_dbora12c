@@ -16,7 +16,8 @@ wget --no-check-certificate -O /etc/pki/tls/certs/ca-bundle.crt https://curl.hax
 #provision Docker settings add user vagrant to docker group
 echo "Install docker  :: git htop tmux zsh"
 rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-yum install -y yum-utils mc zsh git tmux htop
+yum install -y yum-utils mc zsh git tmux htop vim-minimal wget unzip oracle-rdbms-server-12cR1-preinstall
+sysctl -p
 
 sudo yum-config-manager --add-repo https://docs.docker.com/engine/installation/linux/repo_files/centos/docker.repo
 sudo yum makecache fast
@@ -45,11 +46,22 @@ echo "/dev/sdb /var/lib/docker xfs 	defaults 0 	0" >> /etc/fstab
 
 echo "Disable Selinux / Set docker service parameters"
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
-echo "other_args=\"-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock\"" > /etc/sysconfig/docker
 usermod -a -G docker vagrant
 
 chkconfig docker on
 service docker start
+
+#enable experimental features
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo touch /etc/systemd/system/docker.service.d/docker.conf
+sudo su -c "cat <<EOT >> /etc/systemd/system/docker.service.d/docker.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd -D --experimental=true
+EOT"
+
+sudo systemctl daemon-reload
+sudo service docker restart
 
 echo "----------------------------------------------"
 echo "Docker info: "

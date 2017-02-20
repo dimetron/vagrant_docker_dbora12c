@@ -1,17 +1,21 @@
-FROM oraclelinux:7-slim
+FROM oracle/jdk-8u121
 MAINTAINER Dmytro Rashko <drashko@me.com>
 
-#to copy proxy settings if any
-ADD yum.conf  /etc/yum.conf 
+#fix permission issues
+RUN sed '/oracle/d'  /etc/passwd
+RUN echo "oracle:x:1000:1000::/home/oracle:/bin/bash" >> /etc/passwd
+RUN sed '/oinstall/d' /etc/group
+RUN echo "oinstall:x:1000:" >> /etc/group
+RUN chown -vR oracle:oinstall /home/oracle
 
-# add extra packages
-RUN yum install -y vim-minimal oracle-rdbms-server-12cR1-preinstall && \
-	yum clean all && \ 
-	rm -rf /var/lib/{cache,log} /var/log/lastlog
+#Install OpenJDK with all  dependencies
+RUN echo "Installing dependencies" \ 
+	&& yum -y install oracle-rdbms-server-12cR1-preinstall  \ 
+	&& yum -y clean all \ 
+	&& rm -rf /var/lib/{cache,log} /var/log/lastlog
 
 # create directories
-RUN mkdir /opt/oracle /opt/oraInventory /opt/datafile \
- && chown oracle:oinstall -R /opt
+RUN mkdir /opt/oracle /opt/oraInventory /opt/datafile && chown oracle:oinstall -R /opt
 
 # set environment variables
 RUN echo "LANG=en_US.utf-8" >> /etc/environment \

@@ -1,72 +1,33 @@
-# LICENSE CDDL 1.0 + GPL 2.0
-#
-# Modified from 
-# ORACLE DOCKERFILES PROJECT
-# --------------------------
-# This is the Dockerfile for WebLogic 12.1.3 (Full) Generic Distribution
-# 
-# 
-# REQUIRED FILES TO BUILD THIS IMAGE
-# ----------------------------------
-# (1) fmw_12.1.3.0.0_wls.jar
-#     Download the Generic installer from http://www.oracle.com/technetwork/middleware/weblogic/downloads/wls-for-dev-1703574.html
-#
-# (2) jdk-7u25-linux-x64.rpm
-#     Download from http://www.oracle.com/technetwork/java/javase/downloads/
-#
-# HOW TO BUILD THIS IMAGE
-# -----------------------
-# Put all downloaded files in the same directory as this Dockerfile
-# Run: 
-#     cp /etc/yum.conf /vagrant/docker/weblogic-12/
-#     sudo docker build --no-cache -t="oracle/weblogic12" /vagrant/docker/weblogic-12/
-#
-
-#  TODO: Check this out 
-#  https://github.com/oracle/docker-images/tree/master/OracleWebLogic
-
-#Using base image from Oracle
 FROM oracle/jdk-8u121
 MAINTAINER Dmytro Rashko <drashko@me.com>
 
-#to copy proxy settings if any
 ADD yum.conf  /etc/yum.conf 
 
 ENV WLS_PKG  fmw_12.1.3.0.0_wls.jar
-# WLS Admin Password (you may change)
-# This password is used for:
-#  (a) 'weblogic' Linux user in this image
-# -----------------------------------
+ENV JAVA_HOME /usr/java/default
 ENV ADMIN_USER weblogic
 ENV ADMIN_PASSWORD weblogic
-
 ENV BASE_HOME /home
 ENV INST /opt
-
-ENV JAVA_HOME /usr/java/default
 ENV CONFIG_JVM_ARGS -Djava.security.egd=file:/dev/./urandom
 
 # Setup required packages (unzip), filesystem, and crm92 user
 # ------------------------------------------------------------
 RUN useradd -b $BASE_HOME -m -s /bin/bash $ADMIN_USER \
- && mkdir $INST -p \
- && chmod a+xr $INST \ 
+ && mkdir $INST -p && chmod a+xr $INST \ 
  && mkdir $INST/.inventory \
  && echo  $ADMIN_USER:$ADMIN_PASSWORD | chpasswd
 
-#copy weblogic install package
 COPY $WLS_PKG $INST/
-
-# Adjust file permissions, go to /u01 as user '$ADMIN_USER' to proceed with WLS installation
 RUN chown $ADMIN_USER:$ADMIN_USER -R $INST
 
 USER $ADMIN_USER
 WORKDIR $INST
 
-#create .inventory file
 RUN echo -e "inventory_loc=$INST/.inventory" 	> oraInst.loc    \
- && echo -e "\ninst_group=$ADMIN_USER" 		 	>> oraInst.loc   \
- && echo -e "[ENGINE]" 				    		> install.file   \
+ && echo -e "\ninst_group=$ADMIN_USER" 		 	>> oraInst.loc   
+
+RUN echo -e "[ENGINE]" 				    		> install.file   \
  && echo -e "\nResponse File Version=1.0.0.0.0" >> install.file  \
  && echo -e "\n[GENERIC]" 					    >> install.file  \
  && echo -e "\nORACLE_HOME=$INST/$ADMIN_USER"   >> install.file  \
@@ -84,10 +45,11 @@ RUN echo -e "inventory_loc=$INST/.inventory" 	> oraInst.loc    \
 
 # Installation of WebLogic 
 RUN java -jar $WLS_PKG -silent -responseFile $INST/install.file -invPtrLoc $INST/oraInst.loc -jreLoc $JAVA_HOME
+
+USER root
+RUN ln -s /opt/weblogic/oracle_common/modules/org.apache.maven_3.0.5/bin/mvn /usr/bin/mvn
 RUN cd $INST && rm $WLS_PKG oraInst.loc install.file
 
+USER $ADMIN_USER
 WORKDIR $BASE_HOME/$ADMIN_USER
-
-# Define default command to start bash. 
 CMD ["/bin/bash"]
-

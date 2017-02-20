@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
   config.vm.box_url="bento/builds/oracle-7.3.#{ENV['VAGRANT_DEFAULT_PROVIDER']}.box"
   
   config.vm.hostname = "docker-vm"
-  
+
   #PARALLELS PROVIDE SETTINGS
   config.vm.provider "parallels" do |v|
     v.name = "Docker-VM"
@@ -21,14 +21,18 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
    v.name = "Docker-VM"
    v.gui = false
-   v.memory = "1500M"
+   v.memory = "2G"
    v.cpus = "2"   
   end
-   
+  
+  #for some need
+  config.ssh.forward_x11 = true
+  
+
   #use proxy for local RPM cache
-  #config.proxy.http     = "http://127.0.0.1:8080"
-  #config.proxy.https    = "http://127.0.0.1:8080"
-  #config.proxy.no_proxy = "localhost,127.0.0.1"
+  config.proxy.http     = "http://192.168.1.100:8080"
+  config.proxy.https    = "http://192.168.1.100:8080"
+  config.proxy.no_proxy = "localhost,127.0.0.1"
 
   # Oracle and Docker port forwarding
   config.vm.network "forwarded_port", guest: 1521, host: 1521

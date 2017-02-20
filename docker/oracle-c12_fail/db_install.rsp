@@ -267,7 +267,7 @@ oracle.install.db.config.starterdb.memoryOption=
 # on the system.
 # Example: oracle.install.db.config.starterdb.memoryLimit=512
 #-------------------------------------------------------------------------------
-oracle.install.db.config.starterdb.memoryLimit=
+oracle.install.db.config.starterdb.memoryLimit=512
 
 #-------------------------------------------------------------------------------
 # This variable controls whether to load Example Schemas onto
@@ -420,7 +420,7 @@ MYORACLESUPPORT_PASSWORD=
 #
 # Example    : SECURITY_UPDATES_VIA_MYORACLESUPPORT=true
 #------------------------------------------------------------------------------
-SECURITY_UPDATES_VIA_MYORACLESUPPORT=
+SECURITY_UPDATES_VIA_MYORACLESUPPORT=false
 
 #------------------------------------------------------------------------------
 # Specify whether user doesn't want to configure Security Updates.
@@ -432,7 +432,7 @@ SECURITY_UPDATES_VIA_MYORACLESUPPORT=
 #
 # Example    : DECLINE_SECURITY_UPDATES=false
 #------------------------------------------------------------------------------
-DECLINE_SECURITY_UPDATES=
+DECLINE_SECURITY_UPDATES=true
 
 #------------------------------------------------------------------------------
 # Specify the Proxy server name. Length should be greater than zero.

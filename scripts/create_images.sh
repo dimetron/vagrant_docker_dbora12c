@@ -1,16 +1,23 @@
 #!/bin/sh
 
-
 export DOCKER_TMPDIR=/vagrant/tmp
 rm -rf $DOCKER_TMPDIR 
 mkdir  $DOCKER_TMPDIR
 
 #clean old images
-rm -rf /vagrant/docker_export/weblogic*.tar.xz
+rm -rf /vagrant/docker_export/*.tar.xz
 
-#to reduce internal tmp usage after image load we will use external tmp
-echo "export DOCKER_TMPDIR=$DOCKER_TMPDIR" >> /etc/sysconfig/docker
-echo "export DOCKER_TMPDIR=$DOCKER_TMPDIR" >> /etc/profile.d/temp.sh
+#enable experimental features and add DOCKER_TEMP
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo touch /etc/systemd/system/docker.service.d/docker.conf
+sudo su -c "cat <<EOT >> /etc/systemd/system/docker.service.d/docker.conf
+[Service]
+Environment=DOCKER_TMPDIR=/vagrant/tmp
+ExecStart=
+ExecStart=/usr/bin/dockerd -D --experimental=true
+EOT"
+
+sudo systemctl daemon-reload
 sudo service docker restart
 
 chmod +x /vagrant/scripts/*.sh
@@ -19,16 +26,6 @@ chmod +x /vagrant/scripts/*.sh
 /vagrant/scripts/build_weblogic_image.sh
 /vagrant/scripts/build_db_image.sh
 
-
-echo "Build complete"
-docker ps -a
+echo "==========================================="
 docker images
-ls -lstr /vagrant/docker_export/
-
-echo " ~~~"
-
-
-
-
-
-
+echo "==========================================="
