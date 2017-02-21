@@ -29,17 +29,13 @@ sudo docker images
 
 echo "Starting Images"
 echo "...................."
-
-sudo docker run  --privileged --restart=always -h db12c --name database -v /vagrant:/vagrant -v /opt/oracle/product -p 1521:1521 -t -d  oracle/database /bin/bash
-sudo docker run  --privileged --restart=always -h weblogic --name weblogic --volumes-from database -p 8001:8001 -p 8002:8002  -t -d oracle/weblogic12 /bin/bash
-
+sudo docker run  --privileged --restart=always -h db12c --name database -v /dev/urandom:/dev/random -v /vagrant:/vagrant -v /opt/oracle/product -p 1521:1521 -t -d  oracle/database /bin/bash
+DBIP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' database`
+sudo docker run  --privileged -m 1G --memory-swap 1G --restart=always --add-host=db12c:$DBIP -h devdigital --name weblogic -v /vagrant:/vagrant -v /dev/urandom:/dev/random --volumes-from database -p 39300:39300 -p 39301:39301  -t -d oracle/weblogic12 /bin/bash
 sudo docker exec -i database /bin/bash  /etc/init.d/dbstart
 echo "...................."
+
 sudo docker ps -a
 
 echo ". /vagrant/scripts/aliases.sh" >> .zshrc
-
-echo "Installation complete"
 echo "...................."
-
-

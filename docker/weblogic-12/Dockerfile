@@ -47,7 +47,6 @@ RUN echo -e "[ENGINE]" 				    		> install.file   \
 RUN java -jar $WLS_PKG -silent -responseFile $INST/install.file -invPtrLoc $INST/oraInst.loc -jreLoc $JAVA_HOME
 
 USER root
-RUN ln -s /opt/weblogic/oracle_common/modules/org.apache.maven_3.0.5/bin/mvn /usr/bin/mvn
 RUN cd $INST && rm $WLS_PKG oraInst.loc install.file
 
 USER $ADMIN_USER

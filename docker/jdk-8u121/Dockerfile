@@ -10,7 +10,7 @@ ADD yum.conf  /etc/yum.conf
 
 #Install OpenJDK with all  dependencies
 RUN echo "Installing dependencies" \ 
-	&& yum -y install vim-minimal wget unzip \ 
+	&& yum -y install vim-minimal wget unzip ksh hostname ping \ 
 	&& yum -y clean all \ 
 	&& rm -rf /var/lib/{cache,log} /var/log/lastlog
 

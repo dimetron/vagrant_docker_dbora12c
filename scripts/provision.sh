@@ -8,6 +8,15 @@ then
 	echo "------------------------------------------"
 
 	. /vagrant/scripts/import_images.sh
+
+ 	if [ -f "/vagrant/scripts/provision_ext.sh" ];
+ 	then
+		echo "[OK] - running custom installation"
+		/vagrant/scripts/provision_ext.sh
+ 	else
+
+ 	fi
+
 else
     echo "------------------------------------------"
 	echo "Provisioning for the first run ..."	

@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
     v.name = "Docker-VM"
     v.optimize_power_consumption = false
     #v.update_guest_tools = true
-    v.memory = 1500
+    v.memory = 1000
     v.cpus = 2  
  end
 
@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
    v.name = "Docker-VM"
    v.gui = false
    v.memory = "2G"
-   v.cpus = "2"   
+   v.cpus = "4"   
   end
   
   #for some need
@@ -30,14 +30,14 @@ Vagrant.configure("2") do |config|
   
 
   #use proxy for local RPM cache
-  config.proxy.http     = "http://192.168.1.100:8080"
-  config.proxy.https    = "http://192.168.1.100:8080"
+  config.proxy.http     = "http://10.211.55.2:8080"
+  config.proxy.https    = "http://10.211.55.2:8080"
   config.proxy.no_proxy = "localhost,127.0.0.1"
 
   # Oracle and Docker port forwarding
   config.vm.network "forwarded_port", guest: 1521, host: 1521
-  config.vm.network "forwarded_port", guest: 8001, host: 8001
-  config.vm.network "forwarded_port", guest: 8002, host: 8002
+  config.vm.network "forwarded_port", guest: 39300, host: 39300
+  config.vm.network "forwarded_port", guest: 39301, host: 39301
   config.vm.network "forwarded_port", guest: 4243, host: 4243
   
   # run setup.sh
